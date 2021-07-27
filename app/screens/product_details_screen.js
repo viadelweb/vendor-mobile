@@ -1,5 +1,8 @@
 import React from 'react';
 import {
+	Animated,
+	Easing,
+	Keyboard,
 	View
 } from 'react-native';
 
@@ -12,7 +15,6 @@ import {
 	AppCounter,
 	AppButton,
 	AppIcon,
-	AppNotification
 } from '../components';
 import { effectsRegistry } from '../effects';
 import { brokerRegistry } from '../brokers';
@@ -47,6 +49,7 @@ class ProductDetailsScreen extends React.Component {
 		addToCartSuccess: '',
 		addToCartFailed: '',
 		updatedAttribues: {},
+		shift: new Animated.Value(0)
 	};
 	subscribers = new Map();
 	
@@ -54,10 +57,11 @@ class ProductDetailsScreen extends React.Component {
 		if (!broker.hasSelectedProduct())
 			navigate(routes.MAIN);
 		else {
-			notificationBroker.hideNotification();
 			this.getTranslateText();
 			this.createDataSubscribers();
 		}
+		this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this));
+		this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this));
 	}
 
 	createDataSubscribers() {		
@@ -90,7 +94,9 @@ class ProductDetailsScreen extends React.Component {
             sub.unsubscribe();
             sub.complete();
         });
-    }
+		this.keyboardDidShowSub.remove();
+		this.keyboardDidHideSub.remove();
+     }
 
 	getTranslateText() {
 		const { t } = appHookEffects.getEffectsByName(['t']);
@@ -123,9 +129,9 @@ class ProductDetailsScreen extends React.Component {
 	}
 
 	backToProductListings() {
-		setTimeout(() => {
+		setTimeout(async () => {
 			navigate(routes.MAIN);
-		}, 2000);
+		}, 3000);
 	}
 
 	addToCart() {
@@ -145,11 +151,35 @@ class ProductDetailsScreen extends React.Component {
 							})}
 							</AppText>,
 						constants.NOTIFICATION.SUCCESS);
-					notificationBroker.showNotification();	
+					notificationBroker.showNotification(2000);	
 				}
 				this.backToProductListings();
 			})
 		}
+	}
+
+	handleKeyboardDidShow(event) {		
+		Animated.timing(
+			this.state.shift,
+			{
+				toValue: -220,
+				duration: 100,
+				easing: Easing.linear,
+				useNativeDriver: true,
+			}
+		).start();
+	}
+	
+	handleKeyboardDidHide() {
+		Animated.timing(
+			this.state.shift,
+			{
+				toValue: 0,
+				duration: 100,
+				easing: Easing.linear,
+				useNativeDriver: true,
+			}
+		).start();
 	}
 
 	render() {
@@ -159,7 +189,7 @@ class ProductDetailsScreen extends React.Component {
 				size: 35,
 				color: colors.white,
 				onPress: () => {
-					notificationBroker.close();
+					// notificationBroker.close();
 					navigate(routes.MAIN);
 				},
 				styles: styles.leftHeaderIcon,
@@ -174,54 +204,54 @@ class ProductDetailsScreen extends React.Component {
 		};
 
 		return (
-			<AppScreen
-				heroVisible={true}
-				heroUri={this.state.product?.uri}
-				heroStyles={styles.heroImage}
-				heroBlurRadius={0}
-			>
-				<AppNotification onPress={() => notificationBroker.close()} />
-
-				<AppHeaderButtons
-					styles={styles.headerButtons}
-					iconProps={headerButtonConfig}/>	
-				<View style={styles.addToCartButtonContainer}>
-					<AppButton
-						onPress={() => this.addToCart()}
-						styles={styles.addToCartButton}>
-						<AppIcon {...addToCartIcon} />
-					</AppButton>
-				</View>
-
-				<View style={styles.contentContainer}>
-
-					<AppText style={styles.detailsPageHeader}>{this.state.product?.title}</AppText>
-					<AppText numberOfLines={3} style={styles.detailsDescription}>{this.state.product?.description}</AppText>
-					<AppText numberOfLines={2} style={styles.attributeInstructions}>{this.state.updateAttributeInstruction}</AppText>
-					
-					<View style={styles.attrListContainer}>						
-						<AppAttributeList
-							selectedItemAttributes={this.state.product?.attributes}
-							onChange={this.onAttributeUpdate}/>
+			<Animated.View style={[styles.container, { transform: [{translateY: this.state.shift}] }]}>
+				<AppScreen
+					heroVisible={true}
+					heroUri={this.state.product?.uri}
+					heroStyles={styles.heroImage}
+					heroBlurRadius={0}
+				>
+					<AppHeaderButtons
+						styles={styles.headerButtons}
+						iconProps={headerButtonConfig}/>	
+					<View style={styles.addToCartButtonContainer}>
+						<AppButton
+							onPress={() => this.addToCart()}
+							styles={styles.addToCartButton}>
+							<AppIcon {...addToCartIcon} />
+						</AppButton>
 					</View>
-					<AppTextInput
-						onChangeText={text => this.setSpecialInstructionText(text)}
-						value={this.state.specialInstructionText}
-						placeholder={this.state.specialInstructionPlaceholderText}
-						maxLength={120}
-					/>
-					<AppCounter
-						start={this.state.quantityCounterStart}
-						min={this.state.quantityCounterMin}
-						max={this.state.quantityCounterMax}
-						onChange={this.setItemQauntity.bind(this)}
-					/>
-					<AppText style={styles.quantityUpdateText}>
-						{this.state.selectedQuantityText} {this.state.quantityCounter}
-					</AppText>
 
-				</View>
-			</AppScreen>
+					<View style={styles.contentContainer}>
+
+						<AppText style={styles.detailsPageHeader}>{this.state.product?.title}</AppText>
+						<AppText numberOfLines={3} style={styles.detailsDescription}>{this.state.product?.description}</AppText>
+						<AppText numberOfLines={2} style={styles.attributeInstructions}>{this.state.updateAttributeInstruction}</AppText>
+						
+						<View style={styles.attrListContainer}>						
+							<AppAttributeList
+								selectedItemAttributes={this.state.product?.attributes}
+								onChange={this.onAttributeUpdate}/>
+						</View>
+						<AppTextInput
+							onChangeText={text => this.setSpecialInstructionText(text)}
+							value={this.state.specialInstructionText}
+							placeholder={this.state.specialInstructionPlaceholderText}
+							maxLength={120}
+						/>
+						<AppCounter
+							start={this.state.quantityCounterStart}
+							min={this.state.quantityCounterMin}
+							max={this.state.quantityCounterMax}
+							onChange={this.setItemQauntity.bind(this)}
+						/>
+						<AppText style={styles.quantityUpdateText}>
+							{this.state.selectedQuantityText} {this.state.quantityCounter}
+						</AppText>
+
+					</View>
+				</AppScreen>
+			</Animated.View>
 		)
 	}
 }

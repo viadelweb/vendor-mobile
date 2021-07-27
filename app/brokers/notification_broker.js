@@ -16,7 +16,7 @@ class NotificationBroker {
         const defaultConent = {content: null, type: constants.NOTIFICATION.INFO};
 
         const visible = new BehaviorSubject(false);
-        const content = new BehaviorSubject({});
+        const content = new BehaviorSubject();
 
         const _clearContent = () => {
             content.next(defaultConent);
@@ -36,17 +36,19 @@ class NotificationBroker {
                 });
             }
             
-			showNotification() {
+            /**
+             * Display the notification
+             * @param {Number} timeout if set autoclose the notification after provided time
+             */
+			showNotification(timeout) {
                 visible.next(true);
+                if (timeout && timeout > 0)
+                    setTimeout(() => this.close(), timeout);
 			}
             
-			hideNotification() {
-                visible.next(false);
-			}
-
-            close() {
+            async close() {
                 _clearContent();
-                this.hideNotification();
+                visible.next(false);
             }
         }
 

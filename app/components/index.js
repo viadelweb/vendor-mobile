@@ -15,3 +15,5 @@ export * from './app_button';
 export * from './app_icon';
 export * from './app_notification';
 export * from './app_review';
+export * from './app_checkout';
+export * from './app_qrcode';

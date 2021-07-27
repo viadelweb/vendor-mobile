@@ -6,13 +6,19 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import colors from '../screens/styles/colors';
+import constants from '../config/app_constants';
+import { brokerRegistry } from '../brokers';
+// import { AppNotification } from './app_notification';
+
+const notificationBroker = brokerRegistry.broker.getBroker(constants.NOTIFICATION_BROKER);
+
 const styles = {
 	container: {
 		flex: 1,
 	},
 	view: {
 		flex: 1,
-		// paddingHorizontal: 15
 	}
 };
 
@@ -43,21 +49,23 @@ class AppScreen extends React.Component {
 
 	renderView() {
 		const {
+			heroVisible,
 			children,
 			style
 		} = this.props;
-
 		const userStyles = {
 			screen: {
 				...style
 			}
 		};
+		const bgColor = !heroVisible ?  {backgroundColor: colors.white} : {};
 
 		return (
-			<SafeAreaView style={[styles.container]}>
+			<SafeAreaView style={[styles.container, bgColor]}>
 				<View style={[styles.view, userStyles.screen]}>
 					{children}
 				</View>
+				{/* <AppNotification onPress={() => notificationBroker.close()} /> */}
 			</SafeAreaView>
 		)
 	}

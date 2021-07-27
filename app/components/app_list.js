@@ -13,12 +13,14 @@ import { AppListSeparator } from './app_list_seperator';
 import { AppListItemAdd } from './app_listItem_add';
 import { brokerRegistry } from '../brokers';
 import { serviceRegistry } from '../services';
+import { filterBy } from '../utils';
 import styles from '../screens/styles/main_screen_styles';
 import constants from '../config/app_constants';
 import colors from '../screens/styles/colors';
 
 class AppList extends React.Component {
 	state = {
+		filteredItems: [],
 		items: [],
 		reloading: false
 	};
@@ -34,6 +36,7 @@ class AppList extends React.Component {
 		const registeredService = serviceRegistry.service.getService(service);
 		registeredService[serviceMethod].apply(null, serviceMethodArgs);
 		this.createDataSubscriber();
+		this.createFilterSubscriber();
 	}
 
 	createDataSubscriber() {
@@ -47,7 +50,27 @@ class AppList extends React.Component {
 
 		const broker = brokerRegistry.broker.getBroker(dataBroker);
 		this.subscribers.set(key, broker[observable].subscribe(items => {
-			this.setState({items: items});			
+			this.setState({ items: items });			
+		}));
+	}
+
+	createFilterSubscriber() {
+		const {
+			filterBroker,
+			filterObservable
+		} = this.props;
+		if (!filterBroker || !filterObservable)
+			return;
+		const key = filterBroker + '.' + filterObservable;
+		if (this.subscribers.has(key))
+			return;
+
+		const broker = brokerRegistry.broker.getBroker(filterBroker);
+		this.subscribers.set(key, broker[filterObservable].subscribe(filter => {
+			if (filter) {
+				const items = filterBy([...this.state.items], filter);
+				this.setState({filteredItems: items});
+			}
 		}));
 	}
 
@@ -63,9 +86,17 @@ class AppList extends React.Component {
 			onPress,
 		} = this.props;
 
+		const all = [{
+			id: -1,
+			title: 'View All',
+			uri: 'https://images.unsplash.com/photo-1557499305-bd68d0ad468d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
+			description: null,
+			parent: null
+		}];
+
 		return (
 			<FlatList
-				data={this.state.items}
+				data={[...all, ...this.state.items]}
 				keyExtractor={item => item.id.toString()}
 				renderItem={({item}) =>
 					<TouchableHighlight underlayColor={colors.light} onPress={() => onPress(item)}>
@@ -84,12 +115,14 @@ class AppList extends React.Component {
 		const {
 			onRefresh,
 			onPress,
-			refreshing,
+			refreshing
 		} = this.props;
+
+		const dataList = this.state.filteredItems.length > 0 ? this.state.filteredItems : this.state.items;
 
 		return(
 			<FlatList
-				data={this.state.items}
+				data={dataList}
 				keyExtractor={item => item.id.toString()}
 				ItemSeparatorComponent={() => <AppListSeparator />}
 				renderItem={({item}) => 
@@ -115,6 +148,8 @@ class AppList extends React.Component {
 			type
 		} = this.props;
 
+		console.log('rendering: ', type);
+
 		switch(type) {
 			case constants.CATEGORY_LIST:
 				return this.renderCategoryList();
@@ -138,6 +173,8 @@ AppList.propTypes = {
 	onPress: PropTypes.func,
 	onRefresh: PropTypes.func,
 	selectedItemSetter: PropTypes.string,
+	filterBroker: PropTypes.string,
+	filterObservable: PropTypes.string
 }
 
 export { AppList }

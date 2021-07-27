@@ -9,8 +9,7 @@ import {
 	AppScreen,
 	AppText,
 	AppList,
-	AppHeaderButtons,
-	AppNotification
+	AppHeaderButtons
 } from '../components';
 import {default as styles} from './styles/main_screen_styles';
 import { effectsRegistry } from '../effects';
@@ -32,11 +31,14 @@ const COMPANY_LOGO_IMAGE_URI = 'https://images.unsplash.com/photo-1543791187-df7
 const MOCK_COMPANY_NAME = 'Company Name';
 const MOCK_COMPANY_DESCRIPTION = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
+const productBroker = brokerRegistry.broker.getBroker(constants.PRODUCT_BROKER);
+const categoryBroker = brokerRegistry.broker.getBroker(constants.CATEGORY_BROKER);
 
 class MainScreen extends React.Component {
 	state = {
 		estimatedVendorLocation: '',
-		listRefreshing: false
+		listRefreshing: false,
+		selectedCategory: null
 	};
 
 	componentDidMount() {
@@ -44,13 +46,13 @@ class MainScreen extends React.Component {
 	}
 
 	appListItemAddOnPress(item) {
-		const broker = brokerRegistry.broker.getBroker(constants.PRODUCT_BROKER);
-		broker.setSelectedProduct(item);
+		productBroker.setSelectedProduct(item);
 		navigate(routes.PRODUCT_DETAILS);
 	}
 
 	categoryItemOnPress(item) {
 		console.log(item);
+		categoryBroker.setSelectedCategory({key: 'categories.id', filter: item.id});
 	}
 
 	renderItemListContainer() {
@@ -66,6 +68,8 @@ class MainScreen extends React.Component {
 					refreshing={this.state.listRefreshing}
 					onPress={this.appListItemAddOnPress}
 					onRefresh={() => console.log('refreshing list')}
+					filterBroker={constants.CATEGORY_BROKER}
+					filterObservable={constants.CATEGORY_SELECTED_OBSERVABLE}
 				/>
 			</View>
 		)
@@ -115,7 +119,7 @@ class MainScreen extends React.Component {
 		setTimeout(() => {
 			if (t)
 				this.setState({estimatedVendorLocation: t('vendor_distance_text', { distance: '1.21', length: 'miles' })});
-		},0);
+		},1);
 	}
 
 	render() {

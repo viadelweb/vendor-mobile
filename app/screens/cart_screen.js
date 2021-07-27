@@ -1,5 +1,8 @@
 import React from 'react';
 import {
+	Animated,
+	Easing,
+	Keyboard,
 	TouchableWithoutFeedback,
 	View
 } from 'react-native';
@@ -9,7 +12,7 @@ import {
 	AppText,
 	AppIcon,
 	AppReview,
-	AppNotification
+	AppCheckout
 } from '../components';
 import styles from './styles/cart_screen_styles';
 import colors from './styles/colors';
@@ -27,13 +30,18 @@ class CartScreen extends React.Component {
 		termsChecked: false,
 		paymentTermsChecked: false,
 		checkout: '',
-		review: ''
+		review: '',
+		termsRequired: '',
+		shift: new Animated.Value(0)
 	};
 	subscribers = new Map();
 
 	componentDidMount() {
-		notificationBroker.hideNotification();
+		this.getTranslateText();
 		this.createDataSubscribers();
+
+		this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this));
+		this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this));
 	}
 
 	componentWillUnmount() {
@@ -41,6 +49,8 @@ class CartScreen extends React.Component {
             sub.unsubscribe();
             sub.complete();
         });
+		this.keyboardDidShowSub.remove();
+		this.keyboardDidHideSub.remove();
     }
 
 	getTranslateText() {
@@ -49,7 +59,8 @@ class CartScreen extends React.Component {
 			if (t) {
 				this.setState({
 					checkout: t('checkout'),
-					review: t('review')
+					review: t('review'),
+					termsRequired: t('terms_required')
 				})
 			}
 		})
@@ -71,23 +82,40 @@ class CartScreen extends React.Component {
 		}
 	}
 
-	setActiveTab(n) {
-		console.log(this.state.termsChecked, this.state.paymentTermsChecked);
+	setActiveTab(n, e) {
 		if (!this.state.termsChecked || !this.state.paymentTermsChecked) {
-			const { t } = appHookEffects.getEffectsByName(['t']);
-			setTimeout(() => {
-				if (t) {
-					notificationBroker.setContent(<AppText>
-						{t('terms_required')}
-					</AppText>,
-					constants.NOTIFICATION.ERROR
-					);
-					notificationBroker.showNotification();	
-				}
-			})
+			notificationBroker.setContent(
+				<AppText>{this.state.termsRequired}</AppText>,
+				constants.NOTIFICATION.ERROR
+			);
+			notificationBroker.showNotification(2000);
 		}
 		else
 			this.setState({activeTab: n});
+	}
+
+	handleKeyboardDidShow(event) {		
+		Animated.timing(
+			this.state.shift,
+			{
+				toValue: -60,
+				duration: 100,
+				easing: Easing.linear,
+				useNativeDriver: true,
+			}
+		).start();
+	}
+	
+	handleKeyboardDidHide() {
+		Animated.timing(
+			this.state.shift,
+			{
+				toValue: 0,
+				duration: 100,
+				easing: Easing.linear,
+				useNativeDriver: true,
+			}
+		).start();
 	}
 
 	render() {
@@ -96,46 +124,48 @@ class CartScreen extends React.Component {
 		} = this.props;
 
 		return (
-			<AppScreen>
-				<AppNotification onPress={() => notificationBroker.close()} />
-				<View style={styles.tabContainer}>
-					<TouchableWithoutFeedback onPress={() => this.setActiveTab(0)}>
-						<View style={[
-							styles.tabButton,
-							this.state.activeTab === 0 ? {...styles.activeTab} : null
-							]}>
-							<AppText style={[
-									styles.tabText,
-							]}>Review</AppText>
-							<AppIcon
-								name="triangle"
-								size={14}
-								color={colors.white}
-								styles={styles.tabCaret}
-								visible={this.state.activeTab === 0}
-							/>
-						</View>
-					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback onPress={() => this.setActiveTab(1)}>
-						<View style={[
-							styles.tabButton,
-							this.state.activeTab === 1 ? {...styles.activeTab} : null
-							]}>
-							<AppText style={[
-									styles.tabText									
-							]}>Checkout</AppText>
-							<AppIcon
-								name="triangle"
-								size={12}
-								color={colors.white}
-								styles={styles.tabCaret}
-								visible={this.state.activeTab === 1}
-							/>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
-				{this.state.activeTab === 0 && <AppReview onContinueToCheckout={() => this.setActiveTab(1)}/>}
-			</AppScreen>
+			<Animated.View style={[styles.container, { transform: [{translateY: this.state.shift}] }]}>
+				<AppScreen>
+					<View style={styles.tabContainer}>
+						<TouchableWithoutFeedback onPress={(e) => {} /*this.setActiveTab(0, e)*/}>
+							<View style={[
+								styles.tabButton,
+								this.state.activeTab === 0 ? {...styles.activeTab} : null
+								]}>
+								<AppText style={[
+										styles.tabText,
+								]}>Review</AppText>
+								<AppIcon
+									name="triangle"
+									size={14}
+									color={colors.white}
+									styles={styles.tabCaret}
+									visible={this.state.activeTab === 0}
+								/>
+							</View>
+						</TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={(e) => {}/*this.setActiveTab(1, e)*/}>
+							<View style={[
+								styles.tabButton,
+								this.state.activeTab === 1 ? {...styles.activeTab} : null
+								]}>
+								<AppText style={[
+										styles.tabText
+								]}>Checkout</AppText>
+								<AppIcon
+									name="triangle"
+									size={12}
+									color={colors.white}
+									styles={styles.tabCaret}
+									visible={this.state.activeTab === 1}
+								/>
+							</View>
+						</TouchableWithoutFeedback>
+					</View>
+					{this.state.activeTab === 0 && <AppReview onContinueToCheckout={(e) => this.setActiveTab(1, e)}/>}
+					{this.state.activeTab === 1 && <AppCheckout />}
+				</AppScreen>
+			</Animated.View>
 		)
 	}
 }

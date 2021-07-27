@@ -3,6 +3,7 @@ export default [{
 	name: 'Jane Smith',
 	email: 'jane456_sunshine@yahoo.com',
 	phone: '858-331-2314',
+	int_phone_code: '+1',
 	email_verified: true,
 	email_verified_date: '05-16-2021T15:15:23',
 	phone_verified: true,

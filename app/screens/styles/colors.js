@@ -8,6 +8,7 @@ const baseColors = {
     purple: '#6f42c1',
     pink: '#e83e8c',
     red: '#dc3545',
+	lightRed: '#f2b7bd',
     orange: '#fd7e14',
     yellow: '#ffc107',
     green: '#28a745',
@@ -29,10 +30,11 @@ const baseColors = {
 export default {
 	...baseColors,
     /** Text colors */
-    primaryTextColor: baseColors.darkGrey,
+    primaryTextColor: baseColors.primary,
     secondaryTextColor: baseColors.secondary,
     link: '#007bff',
     linkHover: '#0056b3',
+	noteColor: '#b8b8b8',
 
 	/** Alerts */
 	alertPrimaryTextColor: '#004085',

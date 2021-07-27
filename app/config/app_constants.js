@@ -10,6 +10,7 @@ export default {
 	
 	CATEGORY_BROKER: 'CategoryBroker',
 	CATEGORIES_OBSERVABLE: '$$categories',
+	CATEGORY_SELECTED_OBSERVABLE: '$$selectedCategory',
 	CATEGORY_SERVICE: 'CategoryService',
 	CATEGORY_SERVICE_GET_METHOD: 'getCategories',
 	CATEGORY_LIST: 'categoryList',
@@ -38,13 +39,14 @@ export default {
 	CART_PRIVACY_TERMS_OBSERVABLE: '$$cartPrivacyTerms',
 	CART_MESSAGES_TERMS_OBSERVABLE: '$$cartMessagesTerems',
 	CART_ACTIVE_TAB_OBSERVABLE: '$$cartActiveTab',
-	CART_TOTALS_OBSERVABLE: '$$cartTotals',
 	CART_UPDATED_OBSERVABLE: '$$cartUpdated',
+	COMFIRMED_ORDER_OBSERVABLE: '$$confirmedOrder',
 	ORDER_DETAILS_OBSERVABLE: '$$orderDetails',
 	ACCEPTED_TERMS: 'acceptedTerms',
 	ACCEPTED_PAYMENT: 'acceptedPayment',
 	ACCEPTED_PRIVACY: 'acceptedPrivacy',
 	ACCEPTED_MESSAGES: 'acceptedMessages',
+	ACCEPTED_PROMO: 'acceptedPromo',
 	
 	USER_BROKER: 'UserBroker',
 	USER_SERVICE: 'UserService',

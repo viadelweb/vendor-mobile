@@ -19,6 +19,7 @@ import { serviceRegistry } from '../services';
 import styles from '../screens/styles/cart_screen_styles';
 import colors from '../screens/styles/colors';
 import constants from '../config/app_constants';
+import { formatPrice } from '../utils/functions';
 
 const cartBroker = brokerRegistry.broker.getBroker(constants.CART_BROKER);
 const appHookEffects = effectsRegistry.effects.getEffect(constants.APP_HOOK_EFFECTS);
@@ -160,21 +161,11 @@ class AppReview extends React.Component {
 		return parseFloat(price.toString().replace(/[^0.-9]/g, ''), 10);
 	}
 
-	formatPrice(price) {
-		if (!price)
-			return;
-
-		const segments = price.toString().split('.');
-		if (!segments[1]) {
-			price = price + '.00';
-		} else if (segments[1].toString().length === 1) {
-			price = price + '0'
-		}
-		return this.state.orderDetails?.currencySymbol + price;
-	}
-
 	calcItemSubtotal(item) {
-		return this.formatPrice(this.normalizePrice(item.price) * item.selectedQuantity);
+		return formatPrice(
+			this.normalizePrice(item.price) * item.selectedQuantity,
+			this.state.orderDetails?.currencySymbol
+		);
 	}
 
 	updateTerms(isChecked, type) {
@@ -248,7 +239,10 @@ class AppReview extends React.Component {
 									<AppText>&nbsp;</AppText>
 								</AppText>
 								<AppText style={styles.cartTotalPrice}>
-									{this.formatPrice(this.normalizePrice(this.state.orderDetails?.cartSubTotalPrice))}
+									{formatPrice(
+										this.normalizePrice(this.state.orderDetails?.cartSubTotalPrice),
+										this.state.orderDetails?.currencySymbol
+									)}
 								</AppText>
 							</View>
 							{this.hasTaxRate() && <View style={styles.cartTotalRow}>
@@ -256,7 +250,10 @@ class AppReview extends React.Component {
 									<AppText>&nbsp;</AppText>
 								</AppText>
 								<AppText style={styles.cartTotalPrice}>
-									{this.formatPrice(this.normalizePrice(this.state.orderDetails?.taxPrice))}
+									{formatPrice(
+										this.normalizePrice(this.state.orderDetails?.taxPrice),
+										this.state.orderDetails?.currencySymbol
+									)}
 								</AppText>
 							</View>}
 							<View style={styles.cartTotalRow}>
@@ -264,7 +261,10 @@ class AppReview extends React.Component {
 									<AppText>&nbsp;</AppText>
 								</AppText>
 								<AppText style={styles.cartTotalPrice}>
-									{this.formatPrice(this.normalizePrice(this.state.orderDetails?.cartTotalPrice))}
+									{formatPrice(
+										this.normalizePrice(this.state.orderDetails?.cartTotalPrice),
+										this.state.orderDetails?.currencySymbol
+									)}
 								</AppText>
 							</View>
 						</View>

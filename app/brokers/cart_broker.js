@@ -26,6 +26,7 @@ class CartBroker {
 		const cartTotals = new BehaviorSubject({});
 		const cartUpdated = new BehaviorSubject(false);
         const orderDetails = new BehaviorSubject(null);
+        const confirmedOrder = new BehaviorSubject(null);
 
         class CartBroker {
             constructor() {
@@ -35,9 +36,9 @@ class CartBroker {
                 this.$$cartPrivacyTerms = cartPrivacyTerms.asObservable();
                 this.$$cartMessagesTerms = cartMessagesTerms.asObservable();
                 this.$$cartActiveTab = cartActiveTab.asObservable();
-                this.$$cartTotals = cartTotals.asObservable();
 				this.$$cartUpdated = cartUpdated.asObservable();
                 this.$$orderDetails = orderDetails.asObservable();
+                this.$$confirmedOrder = confirmedOrder.asObservable();
             }
 
             updateCart(currentOrder) {
@@ -51,18 +52,26 @@ class CartBroker {
                 }
             }
 
-            updateAttributes(product, attrs) {
-
-            }
-			
-			calcTotals() {
-
-			}
-
 			updateMeta(key, value, role) {
 				if (role === constants.ADMIN_ROLE || role === constants.MAINT_ROLE)
 					meta.set(key, value);
 			}
+
+            setOrderConfirmed(order) {
+                confirmedOrder.next(order);
+            }
+
+            clearCart() {
+                cartItems.next([]);
+                cartTerms.next(false);
+                cartPaymentTerms.next(false);
+                cartPrivacyTerms.next(false);
+                cartMessagesTerms.next(false);
+                cartActiveTab.next('review');
+                cartTotals.next({});
+                cartUpdated.next(false);
+                orderDetails.next(null);
+            }
         }
 
         this.broker = new CartBroker();

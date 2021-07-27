@@ -14,10 +14,12 @@ class CategoryBroker {
             return;
 
         const categories = new BehaviorSubject([]);
+        const selectedCategory = new BehaviorSubject(null);
 
         class CategoryBroker {
             constructor() {
                 this.$$categories = categories.asObservable();
+                this.$$selectedCategory = selectedCategory.asObservable();
             }
 
             setCategories(data) {
@@ -28,6 +30,14 @@ class CategoryBroker {
 
             clearCategories() {
                 this.categories.next([]);
+            }
+
+            setSelectedCategory(catId) {
+                selectedCategory.next(catId);
+            }
+
+            clearSelectedCategory() {
+                selectedCategory.next(null);
             }
         }
 

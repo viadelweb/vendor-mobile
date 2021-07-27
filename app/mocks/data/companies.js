@@ -10,9 +10,11 @@ export default [{
 	poc_name: 'Susan Winters',
 	poc_title: 'Founder',
 	poc_phone: '213-655-4411',
+	poc_int_phone_code: '+1',
 	alt_poc_name: null,
 	alt_poc_title: null,
 	alt_poc_phone: null,
+	alt_poc_int_phone_code: '+1',
 	logo_uri: 'https://images.unsplash.com/photo-1543791187-df796fa11835?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
 	hero_uri: 'https://images.unsplash.com/photo-1555965708-54e82207ba97?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
 }]

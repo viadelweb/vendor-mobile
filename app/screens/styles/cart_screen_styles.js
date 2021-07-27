@@ -9,6 +9,14 @@ const shared = {
 }
 
 export default {
+	container: {
+		flex: 1,
+		height: '100%',
+		left: 0,
+		position: 'absolute',
+		top: 0,
+		width: '100%',
+	},
 	tabContainer: {
 		display: 'flex',
 		justifyContent: 'space-between',
@@ -49,6 +57,11 @@ export default {
 		flexDirection: 'row',
 		paddingVertical: 20,
 		paddingHorizontal: 10
+	},
+	checkoutDetailsHeader: {
+		display: 'flex',
+		paddingVertical: 20,
+		alignItems: 'center'
 	},
 	cartItems: {
 		display: 'flex',
@@ -151,5 +164,26 @@ export default {
 	btn: {
 		...buttons.btnPrimaryM,
 		borderRadius: 0
+	},
+	totalTitleText: {
+		fontSize: 22,
+		color: colors.secondaryTextColor
+	},
+	totalText: {
+		fontSize: 48,
+		paddingVertical: 20,
+		fontWeight: '400'
+	},
+	inputTextFieldContainer: {
+		paddingHorizontal: 15,
+	},
+	instructionText: {
+		color: colors.medGrey
+	},
+	required: {
+		color: colors.red
+	},
+	invalidTextField: {
+		borderColor: colors.red
 	}
 }

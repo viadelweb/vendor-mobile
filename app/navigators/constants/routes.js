@@ -4,5 +4,6 @@ export default Object.freeze({
 	MAIN: 'Main',
 	PRODUCT_DETAILS: 'ProductDetails',
 	CART: 'Cart',
-	MENU_DRAWER: 'MenuDrawer'
+	MENU_DRAWER: 'MenuDrawer',
+	ORDER_CONFIRMATION: 'OrderConfirmation'
 });

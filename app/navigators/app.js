@@ -6,7 +6,8 @@ import routes from './constants/routes';
 import {
 	CartScreen,
 	MainScreen,
-	ProductDetailsScreen
+	ProductDetailsScreen,
+	OrderConfirmationScreen
 } from '../screens';
 import AppDrawerContentComponent from './components/app_drawer_content_component';
 import { effectsRegistry } from '../effects';
@@ -16,6 +17,7 @@ const Root = createStackNavigator();
 const Main = createStackNavigator();
 const Modal = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const OrderConfirmation = createStackNavigator();
 const appHookEffects = effectsRegistry.effects.getEffect(constants.APP_HOOK_EFFECTS);
 
 export default class AppNavigator extends React.Component {
@@ -71,6 +73,14 @@ export default class AppNavigator extends React.Component {
 					headerShown: true,
 					headerBackTitle: this.state.backButton,
 					headerTitle: this.state.reviewCart,
+				}}
+			/>
+			<OrderConfirmation.Screen
+				name={routes.ORDER_CONFIRMATION}
+				component={OrderConfirmationScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerShown: false
 				}}
 			/>
 		</Main.Navigator>

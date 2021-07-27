@@ -10,6 +10,14 @@ const shared = {
 }
 
 export default {
+	container: {
+		flex: 1,
+		height: '100%',
+		left: 0,
+		position: 'absolute',
+		top: 0,
+		width: '100%',
+	},
 	headerButtons: {
 		...common_styles.headerButtons,
 		top: Constants.statusBarHeight,
