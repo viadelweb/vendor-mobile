@@ -7,7 +7,8 @@ import {
 	CartScreen,
 	MainScreen,
 	ProductDetailsScreen,
-	OrderConfirmationScreen
+	OrderConfirmationScreen,
+	PopupScreen
 } from '../screens';
 import AppDrawerContentComponent from './components/app_drawer_content_component';
 import { effectsRegistry } from '../effects';
@@ -97,6 +98,18 @@ export default class AppNavigator extends React.Component {
 			/>
 		</Modal.Navigator>
 
+		const ModalPopupStackNavigator = () => <Modal.Navigator mode="modal">
+			<Modal.Screen
+				name={routes.POPUP}
+				component={PopupScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerShown: false,
+					cardStyle: 'modal'
+				}}
+			/>
+		</Modal.Navigator>
+
 		return (
 			<Root.Navigator
 				mode="modal"
@@ -106,6 +119,7 @@ export default class AppNavigator extends React.Component {
 				}}>
 				<Root.Screen name={routes.MENU_DRAWER} component={DrawerNavigator} />
 				<Root.Screen name={routes.PRODUCT_DETAILS} component={ModalStackNavigator}/>
+				<Root.Screen name={routes.POPUP} component={ModalPopupStackNavigator}/>
 			</Root.Navigator>
 		)
 	}

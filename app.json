@@ -20,7 +20,10 @@
     "ios": {
       "bundleIdentifier": "com.viadelweb.vendermobile",
       "buildNumber": "1.0.0",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "config": {
+        "googleMapsApiKey": "AIzaSyCKV-RLmxHKIjEceKd3rL6loE9V0jYS9Sc"
+      }
     },
     "android": {
       "package": "com.viadelweb.vendermobile",
@@ -28,6 +31,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyCrSxEe6-dBk_IqfDsr79QayrD81qc220Y" }
       }
     },
     "web": {

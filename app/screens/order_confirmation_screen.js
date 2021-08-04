@@ -2,12 +2,13 @@ import React from 'react';
 import {
 	View,
 } from 'react-native';
-// import MapView from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 import {
 	AppScreen,
 	AppText,
-	AppQRCode
+	AppQRCode,
+	AppButton
 } from '../components';
 import styles from './styles/order_confirmation_screen_styles';
 import constants from '../config/app_constants';
@@ -125,11 +126,18 @@ class OrderConfirmationScreen extends React.Component {
 					</View>
 				</View>
 				<View style={styles.mapContainer}>
-					{/* <MapView
-						initialRegion={this.state.region}
-						onRegionChange={this.onRegionChange}
-					/> */}
-					<AppText>GET DIRECTIONS</AppText>
+					<MapView
+						style={{
+							flex: 1
+						  }}
+						  initialRegion={{
+							latitude: 37.78825,
+							longitude: -122.4324,
+							latitudeDelta: 0.0922,
+							longitudeDelta: 0.0421
+						  }}
+					/>
+					<AppButton style={styles.getDirectionText}>GET DIRECTIONS</AppButton>
 				</View>
 			</AppScreen>
 		)

@@ -14,6 +14,7 @@ export default ({children}) => {
 		const categoryService = serviceRegistry.service.getService(constants.CATEGORY_SERVICE);
 		const productService = serviceRegistry.service.getService(constants.PRODUCT_SERVICE);
 		const attributeService = serviceRegistry.service.getService(constants.ATTRIBUTE_SERVICE);
+		const vendorService = serviceRegistry.service.getService(constants.VENDER_SERVICE);
 		// loaders
 		categoryService.getCategories();
 		productService.getProducts();

@@ -50,7 +50,10 @@ export default {
 		textAlign: 'right'
 	},
 	mapContainer: {
-		width: '100%',
-		height: 200
+		width: '100%'
+	},
+	getDirectionText: {
+		color: colors.alertPrimaryLinkColor,
+		textAlign: 'center'
 	}
 }

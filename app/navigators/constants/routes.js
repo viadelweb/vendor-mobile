@@ -5,5 +5,6 @@ export default Object.freeze({
 	PRODUCT_DETAILS: 'ProductDetails',
 	CART: 'Cart',
 	MENU_DRAWER: 'MenuDrawer',
-	ORDER_CONFIRMATION: 'OrderConfirmation'
+	ORDER_CONFIRMATION: 'OrderConfirmation',
+	POPUP: 'Popup'
 });

@@ -61,6 +61,10 @@ export default {
 	NOTIFICATION_VISIBLE_OBSERVABLE: '$$visible',
 	NOTIFICATION_CONTENT_OBSERVABLE: '$$content',
 
+	LOCATION_BROKER: 'LocationBroker',
+	CURRENT_LOCATION_OBSERVABLE: '$$currentLocation',
+	VENDER_SERVICE: 'VendorService',
+
 	USER_ROLE: 'user',
 	ADMIN_ROLE: 'admin',
 	VENDOR_ROLE: 'admin',

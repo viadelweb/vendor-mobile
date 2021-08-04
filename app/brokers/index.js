@@ -5,6 +5,7 @@ import { productBroker } from './product_broker';
 import { attributeBroker } from './attribute_broker';
 import { cartBroker } from './cart_broker';
 import { notificationBroker } from './notification_broker';
+import { locationBroker } from './location_broker';
 
 brokerRegistry.createClass();
 categoryBroker.createClass();
@@ -12,6 +13,7 @@ productBroker.createClass();
 attributeBroker.createClass();
 cartBroker.createClass();
 notificationBroker.createClass();
+locationBroker.createClass();
 
 brokerRegistry.broker.registerBrokers(new Map([
 	[constants.CATEGORY_BROKER, categoryBroker.broker],
@@ -19,6 +21,7 @@ brokerRegistry.broker.registerBrokers(new Map([
 	[constants.ATTRIBUTE_BROKER, attributeBroker.broker],
 	[constants.CART_BROKER, cartBroker.broker],
 	[constants.NOTIFICATION_BROKER, notificationBroker.broker],
+	[constants.LOCATION_BROKER, locationBroker.broker]
 ]));
 
 console.log('listBrokers: ', brokerRegistry.broker.listBrokers());

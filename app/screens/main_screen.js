@@ -14,14 +14,16 @@ import {
 import {default as styles} from './styles/main_screen_styles';
 import { effectsRegistry } from '../effects';
 import { brokerRegistry } from '../brokers';
+import { serviceRegistry } from '../services';
 import {
 	AppHooks,
 	AppServices
  } from '../utils/components';
 import constants from '../config/app_constants';
 import { navigate } from '../navigators/root';
+import { location } from '../libraries';
 import routes from '../navigators/constants/routes';
-import colors from '../screens/styles/colors';
+import colors from './styles/colors';
 
 /**
  * TODO: replace constants with api service when available
@@ -31,8 +33,11 @@ const COMPANY_LOGO_IMAGE_URI = 'https://images.unsplash.com/photo-1543791187-df7
 const MOCK_COMPANY_NAME = 'Company Name';
 const MOCK_COMPANY_DESCRIPTION = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
+const appHookEffects = effectsRegistry.effects.getEffect(constants.APP_HOOK_EFFECTS);
 const productBroker = brokerRegistry.broker.getBroker(constants.PRODUCT_BROKER);
 const categoryBroker = brokerRegistry.broker.getBroker(constants.CATEGORY_BROKER);
+const locationBroker = brokerRegistry.broker.getBroker(constants.LOCATION_BROKER);
+const vendorService = serviceRegistry.service.getService(constants.VENDER_SERVICE);
 
 class MainScreen extends React.Component {
 	state = {
@@ -40,9 +45,53 @@ class MainScreen extends React.Component {
 		listRefreshing: false,
 		selectedCategory: null
 	};
+	subscribers = new Map();
 
-	componentDidMount() {
-		this.getVendorLocation();
+	async componentDidMount() {
+		this.createDataSubscribers();
+		const granted = await location.getPermission();
+		if (granted) {
+			const {latitude, longitude} = await location.getLocation();
+			console.log(latitude, longitude);
+			if (latitude && longitude)
+			// udpate user location
+			vendorService.updateUserLocation(latitude, longitude);
+		} 
+	}
+
+	componentWillUnmount() {
+    	this.subscribers.forEach((sub, key) => {
+            sub.unsubscribe();
+            sub.complete();
+        });
+    }
+
+	createDataSubscribers() {
+		const key = constants.VENDER_SERVICE + '.' + constants.CURRENT_LOCATION_OBSERVABLE;
+		if (!this.subscribers.has(key)) {
+			this.subscribers.set(key, locationBroker[constants.CURRENT_LOCATION_OBSERVABLE].subscribe(location => {
+				if (location) {
+					const {
+						t
+					} = appHookEffects.getEffectsByName(['t']);
+					/**
+					 * FIXME: Estimated distance to vendor should be returned from the server
+					 */
+					setTimeout(() => {
+						if (t)
+							this.setState({
+								estimatedVendorLocation: t(
+									'vendor_distance_text',
+									{
+										distance: '1.21',
+										length: 'miles' 
+									}
+								)
+							});
+					});
+				}
+			}))
+		}
 	}
 
 	appListItemAddOnPress(item) {
@@ -105,21 +154,6 @@ class MainScreen extends React.Component {
 				{children}
 			</AppHooks>
 		)
-	}
-
-	getVendorLocation() {
-		const appHookEffects = effectsRegistry.effects.getEffect(constants.APP_HOOK_EFFECTS);
-		const {
-			t
-		} = appHookEffects.getEffectsByName(['t']);
-		console.log(t);
-		/**
-		 * TODO: Rquest vendor location, this should be loaded from the server
-		 */
-		setTimeout(() => {
-			if (t)
-				this.setState({estimatedVendorLocation: t('vendor_distance_text', { distance: '1.21', length: 'miles' })});
-		},1);
 	}
 
 	render() {
