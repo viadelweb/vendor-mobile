@@ -148,8 +148,6 @@ class AppList extends React.Component {
 			type
 		} = this.props;
 
-		console.log('rendering: ', type);
-
 		switch(type) {
 			case constants.CATEGORY_LIST:
 				return this.renderCategoryList();

@@ -65,6 +65,7 @@ export default {
 	CURRENT_LOCATION_OBSERVABLE: '$$currentLocation',
 	VENDER_SERVICE: 'VendorService',
 
+	AWAITING_CONFIRMATION: 'awaiting_confirmation',
 	USER_ROLE: 'user',
 	ADMIN_ROLE: 'admin',
 	VENDOR_ROLE: 'admin',

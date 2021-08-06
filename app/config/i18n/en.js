@@ -4,6 +4,7 @@ export default {
 		label: 'English'
 	},
 	translations: {
+		test_translation_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 		vendor_distance_text: '{distance} {length} away',
 		back_button_text: 'BACK',
 		update_attribute_instructions: 'Add, remove or update toppings. Extra topping may incur addtional charges at checkout',

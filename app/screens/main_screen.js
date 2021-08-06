@@ -208,7 +208,7 @@ class MainScreen extends React.Component {
 							{this.state.estimatedVendorLocation}
 						</AppText>
 					</View>
-					{this.renderCategories()}					
+					{this.renderCategories()}
 					{this.renderItemListContainer()}
 				</AppScreen>
 			))}</>

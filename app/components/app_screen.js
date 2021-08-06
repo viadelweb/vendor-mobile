@@ -51,14 +51,16 @@ class AppScreen extends React.Component {
 		const {
 			heroVisible,
 			children,
-			style
+			style,
+			customBackground
 		} = this.props;
 		const userStyles = {
 			screen: {
 				...style
 			}
 		};
-		const bgColor = !heroVisible ?  {backgroundColor: colors.white} : {};
+		let bgColor = !heroVisible ? {backgroundColor: colors.white} :  {};
+		bgColor = !customBackground ? bgColor : customBackground;
 
 		return (
 			<SafeAreaView style={[styles.container, bgColor]}>
@@ -86,6 +88,7 @@ AppScreen.defaultProps = {
 }
 
 AppScreen.propTypes = {
+	customBackground: PropTypes.any,
 	style: PropTypes.any,
 	heroVisible: PropTypes.bool,
 	heroStyles: PropTypes.any,

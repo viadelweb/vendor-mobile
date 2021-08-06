@@ -8,7 +8,8 @@ import {
 	MainScreen,
 	ProductDetailsScreen,
 	OrderConfirmationScreen,
-	PopupScreen
+	PopupScreen,
+	DashboardScreen
 } from '../screens';
 import AppDrawerContentComponent from './components/app_drawer_content_component';
 import { effectsRegistry } from '../effects';
@@ -54,6 +55,12 @@ export default class AppNavigator extends React.Component {
 				component={MainStackNavigator} 
 				options={{
 					drawerLabel: 'Home'
+				}}/>
+			<Drawer.Screen
+				name={routes.CART}
+				component={CartScreen} 
+				options={{
+					drawerLabel: 'Cart'
 				}}/>
 		</Drawer.Navigator>
 
@@ -105,7 +112,10 @@ export default class AppNavigator extends React.Component {
 				options={{
 					headerBackTitleVisible: false,
 					headerShown: false,
-					cardStyle: 'modal'
+					presentation: 'transparentModal',
+					cardShadowEnabled: false,
+					cardOverlayEnabled: true,
+					cardStyle: { backgroundColor: 'rgba(0,0,0,0.5)' }
 				}}
 			/>
 		</Modal.Navigator>
@@ -119,7 +129,16 @@ export default class AppNavigator extends React.Component {
 				}}>
 				<Root.Screen name={routes.MENU_DRAWER} component={DrawerNavigator} />
 				<Root.Screen name={routes.PRODUCT_DETAILS} component={ModalStackNavigator}/>
-				<Root.Screen name={routes.POPUP} component={ModalPopupStackNavigator}/>
+				<Root.Screen
+					name={routes.POPUP}
+					component={ModalPopupStackNavigator}
+					options={{ 
+						presentation: 'transparentModal',
+						cardOverlayEnabled: true,
+						cardStyle: {
+							backgroundColor: 'rgba(0,0,0,0.5)'
+						}
+					}}/>
 			</Root.Navigator>
 		)
 	}
