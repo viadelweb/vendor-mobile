@@ -22,7 +22,7 @@
       "buildNumber": "1.0.0",
       "supportsTablet": false,
       "config": {
-        "googleMapsApiKey": "AIzaSyCKV-RLmxHKIjEceKd3rL6loE9V0jYS9Sc"
+        "googleMapsApiKey": "<apiKey>"
       }
     },
     "android": {
@@ -33,7 +33,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyCrSxEe6-dBk_IqfDsr79QayrD81qc220Y" }
+        "googleMaps": { "apiKey": "<apiKey>" }
       }
     },
     "web": {
