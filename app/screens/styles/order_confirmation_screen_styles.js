@@ -34,9 +34,9 @@ export default {
 		paddingBottom: 20
 	},
 	rowDataContainer: {
-		flex: 1,
 		width: '100%',
-		paddingHorizontal: 15
+		paddingHorizontal: 15,
+		paddingVertical: 10,
 	},
 	row: {
 		flexDirection: 'row',
@@ -49,11 +49,17 @@ export default {
 	comment: {
 		textAlign: 'right'
 	},
+	commentNewLine: {
+		color: colors.noteColor,
+		fontSize: 12
+	},
 	mapContainer: {
-		width: '100%'
+		flex: 1,
+		width: '100%',
 	},
 	getDirectionText: {
-		color: colors.alertPrimaryLinkColor,
-		textAlign: 'center'
+		paddingVertical: 15,
+		textAlign: 'center',
+		color: colors.link
 	}
 }

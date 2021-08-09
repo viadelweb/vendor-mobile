@@ -14,3 +14,6 @@ web-build/
 
 # we should be using yarn, not npm
 package-lock.json
+
+# ignore .env files
+.env

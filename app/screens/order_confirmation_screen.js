@@ -94,6 +94,10 @@ class OrderConfirmationScreen extends React.Component {
 		}
 	}
 
+	openMaps() {
+		console.log('clicked');
+	}
+
 
 	render() {
 		return (
@@ -122,22 +126,23 @@ class OrderConfirmationScreen extends React.Component {
 					</View>
 					<View>
 						<AppText style={styles.title}>{this.state.additionalInformation}</AppText>
-						<AppText style={styles.commentNewLine}>Additional daily info</AppText>
+						<AppText style={styles.commentNewLine} numberOfLines={2}>Additional daily info</AppText>
 					</View>
 				</View>
 				<View style={styles.mapContainer}>
 					<MapView
 						style={{
 							flex: 1
-						  }}
-						  initialRegion={{
+						}}
+						initialRegion={{
 							latitude: 37.78825,
 							longitude: -122.4324,
 							latitudeDelta: 0.0922,
 							longitudeDelta: 0.0421
-						  }}
+						}}
+						provider="google"
 					/>
-					<AppButton style={styles.getDirectionText}>GET DIRECTIONS</AppButton>
+					<AppButton onPress={this.openMaps}><AppText style={styles.getDirectionText}>GET DIRECTIONS</AppText></AppButton>
 				</View>
 			</AppScreen>
 		)
